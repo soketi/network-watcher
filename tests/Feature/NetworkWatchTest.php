@@ -42,6 +42,8 @@ class NetworkWatchTest extends TestCase
         ])->assertExitCode(0);
 
         Http::assertSent(function (Request $request) {
+            dump($request->url());
+
             return in_array($request->url(), [
                 'http://localhost:6001/metrics?json=1',
                 'http://localhost:6001/probes/reject-new-connections?token=probes-token',
@@ -86,6 +88,8 @@ class NetworkWatchTest extends TestCase
         ])->assertExitCode(0);
 
         Http::assertSent(function (Request $request) {
+            dump($request->url());
+
             return in_array($request->url(), [
                 'http://localhost:6001/metrics?json=1',
                 'http://localhost:6001/probes/accept-new-connections?token=probes-token',
