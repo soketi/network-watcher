@@ -85,7 +85,7 @@ class WatchNetworkCommand extends Command
     }
 
     /**
-     * Check the pod metrics to adjust weights.
+     * Check the pod metrics to adjust new connection allowance.
      *
      * @param  \RenokiCo\PhpK8s\K8sResources\K8sPod  $pod
      * @param  int  $memoryThreshold
