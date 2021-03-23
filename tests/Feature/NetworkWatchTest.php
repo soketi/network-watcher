@@ -39,7 +39,7 @@ class NetworkWatchTest extends TestCase
             '--memory-percent' => 80,
             '--interval' => 1,
             '--test' => true,
-        ]);
+        ])->assertExitCode(0);
 
         Http::assertSent(function (Request $request) {
             return in_array($request->url(), [
@@ -83,7 +83,7 @@ class NetworkWatchTest extends TestCase
             '--memory-percent' => 90,
             '--interval' => 1,
             '--test' => true,
-        ]);
+        ])->assertExitCode(0);
 
         Http::assertSent(function (Request $request) {
             return in_array($request->url(), [
