@@ -13,7 +13,7 @@ class NetworkWatchTest extends TestCase
     {
         $deployment = LaravelK8s::getDeploymentByName('echo-server-test');
 
-        while(! $deployment->allPodsAreRunning()) {
+        while (! $deployment->allPodsAreRunning()) {
             echo "Waiting for {$deployment->getName()} deployment to have pods running...";
             sleep(1);
             $deployment->refresh();
@@ -57,7 +57,7 @@ class NetworkWatchTest extends TestCase
     {
         $deployment = LaravelK8s::getDeploymentByName('echo-server-test');
 
-        while(! $deployment->allPodsAreRunning()) {
+        while (! $deployment->allPodsAreRunning()) {
             echo "Waiting for {$deployment->getName()} deployment to have pods running...";
             sleep(1);
             $deployment->refresh();

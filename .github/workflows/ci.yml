@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  build:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    runs-on: ubuntu-latest
+    name: Testing
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0
+          extensions: dom, curl, intl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
+          coverage: pcov
+
+      - uses: actions/cache@v1
+        name: Cache Composer dependencies
+        with:
+          path: ~/.composer/cache/files
+          key: composer-${{ hashFiles('composer.json') }}
+
+      - uses: manusa/actions-setup-minikube@v2.3.0
+        name: Setup Minikube
+        with:
+          minikube version: v1.17.0
+          kubernetes version: "1.20.2"
+          github token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Run Kubernetes Proxy
+        run: |
+          kubectl proxy --port=8080 &
+
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Run tests
+        run: |
+          vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
+
+      - uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
