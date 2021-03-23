@@ -40,6 +40,10 @@ jobs:
         run: |
           kubectl proxy --port=8080 &
 
+      - name: Load Kubernetes fixtures
+        run: |
+          kubectl apply -f tests/fixtures/echo.yaml
+
       - name: Install dependencies
         run: |
           composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader
