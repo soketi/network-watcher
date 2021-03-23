@@ -95,10 +95,6 @@ class WatchNetworkCommand extends Command
      */
     protected function checkPod(K8sPod $pod, int $memoryThreshold, string $probesToken, int $echoAppPort): void
     {
-        if (! $pod->isRunning()) {
-            return;
-        }
-
         $memoryUsagePercentage = $this->getMemoryUsagePercentage($this->getPodMetrics($pod, $echoAppPort));
         $rejectsNewConnections = $pod->getLabel('echo.soketi.app/rejects-new-connections', 'no');
         $dateTime = now()->toDateTimeString();
@@ -150,7 +146,13 @@ class WatchNetworkCommand extends Command
 
     protected function getMemoryUsagePercentage(array $metrics): float
     {
-        return $this->getUsedMemoryBytes($metrics) * 100 / $this->getTotalMemoryBytes($metrics);
+        $totalMemoryBytes = $this->getTotalMemoryBytes($metrics);
+
+        if ($totalMemoryBytes === 0) {
+            return 0.00;
+        }
+
+        return $this->getUsedMemoryBytes($metrics) * 100 / $totalMemoryBytes;
     }
 
     protected function getTotalMemoryBytes(array $metrics): int
