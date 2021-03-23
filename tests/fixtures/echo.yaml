@@ -3,7 +3,7 @@ kind: Secret
 metadata:
   name: echo-server-test-tokens
 stringData:
-  PROBES_TOKEN: new-api-token
+  PROBES_TOKEN: probes-token
 ---
 apiVersion: apps/v1
 kind: Deployment

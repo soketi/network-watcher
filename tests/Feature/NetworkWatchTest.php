@@ -44,7 +44,7 @@ class NetworkWatchTest extends TestCase
         Http::assertSent(function (Request $request) {
             return in_array($request->url(), [
                 'http://localhost:6001/metrics?json=1',
-                'http://localhost:6001/probes/reject-new-connections?token=new-api-token',
+                'http://localhost:6001/probes/reject-new-connections?token=probes-token',
             ]);
         });
 
@@ -88,7 +88,7 @@ class NetworkWatchTest extends TestCase
         Http::assertSent(function (Request $request) {
             return in_array($request->url(), [
                 'http://localhost:6001/metrics?json=1',
-                'http://localhost:6001/probes/accept-new-connections?token=new-api-token',
+                'http://localhost:6001/probes/accept-new-connections?token=probes-token',
             ]);
         });
 

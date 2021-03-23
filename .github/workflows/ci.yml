@@ -44,6 +44,10 @@ jobs:
         run: |
           kubectl apply -f tests/fixtures/echo.yaml
 
+      - name: Copy environment variables
+        run: |
+          cp .env.example .env
+
       - name: Install dependencies
         run: |
           composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader
