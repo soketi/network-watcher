@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: echo-server-test-tokens
+stringData:
+  PROBES_TOKEN: new-api-token
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-server-test
+  labels:
+    app: echo-server-test
+    state: testing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: echo-server-test
+      state: testing
+  template:
+    metadata:
+      labels:
+        app: echo-server-test
+        state: testing
+        deployment-name: echo-server-test
+    spec:
+      containers:
+        - name: echo
+          image: soketi/echo-server:4.2.0-14.16.0-alpine
+          env:
+            - name: PRESENCE_STORAGE_DATABASE
+              value: socket
+            - name: PROMETHEUS_ENABLED
+              value: "1"
+            - name: STATS_DRIVER
+              value: "prometheus"
+            - name: NETWORK_PROBES_API_ENABLED
+              value: "1"
+            - name: NETWORK_PROBES_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: echo-server-test-tokens
+                  key: PROBES_TOKEN
+          command:
+            - node
+            - --max-old-space-size=256
+            - --max_old_space_size=256
+            - --optimize_for_size
+            - --optimize-for-size
+            - /app/bin/server.js
+            - start
+          ports:
+            - containerPort: 6001
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 200m
+              memory: 128Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 6001
+              httpHeaders:
+              - name: X-Kube-Healthcheck
+                value: "Yes"
+            initialDelaySeconds: 5
+            periodSeconds: 1
+            failureThreshold: 1
+            successThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 6001
+              httpHeaders:
+              - name: X-Kube-Healthcheck
+                value: "Yes"
+            initialDelaySeconds: 5
+            periodSeconds: 1
+            failureThreshold: 1
+            successThreshold: 1

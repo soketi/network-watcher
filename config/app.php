@@ -55,6 +55,7 @@ return [
 
     'providers' => [
         App\Providers\AppServiceProvider::class,
+        \RenokiCo\LaravelK8s\LaravelK8sServiceProvider::class,
     ],
 
 ];
