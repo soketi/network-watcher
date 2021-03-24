@@ -99,20 +99,22 @@ class WatchNetworkCommand extends Command
         $rejectsNewConnections = $pod->getLabel('echo.soketi.app/rejects-new-connections', 'no');
         $dateTime = now()->toDateTimeString();
 
+        $this->line("[{$dateTime}] Current memory usage is {$memoryUsagePercentage}%. Checking...", null, 'v');
+
         if ($memoryUsagePercentage >= $memoryThreshold) {
             if ($rejectsNewConnections === 'no') {
                 $this->info("[{$dateTime}] Pod now rejects connections.");
-                $this->info("[{$dateTime}] Pod uses {$memoryUsagePercentage}, threshold is {$memoryThreshold}.");
-            }
+                $this->info("[{$dateTime}] Echo container uses {$memoryUsagePercentage}%, threshold is {$memoryThreshold}%");
 
-            $this->rejectNewConnections($pod, $probesToken, $echoAppPort);
+                $this->rejectNewConnections($pod, $probesToken, $echoAppPort);
+            }
         } else {
             if ($rejectsNewConnections === 'yes') {
-                $this->info("[{$dateTime}] Pod now accepts connections (memory usage: {$memoryUsagePercentage}% RAM used.");
-                $this->info("[{$dateTime}] Pod uses {$memoryUsagePercentage}, threshold is {$memoryThreshold}.");
-            }
+                $this->info("[{$dateTime}] Pod now accepts connections.");
+                $this->info("[{$dateTime}] Echo container uses {$memoryUsagePercentage}%, threshold is {$memoryThreshold}%");
 
-            $this->acceptNewConnections($pod, $probesToken, $echoAppPort);
+                $this->acceptNewConnections($pod, $probesToken, $echoAppPort);
+            }
         }
     }
 
