@@ -100,14 +100,14 @@ class WatchNetworkCommand extends Command
         $dateTime = now()->toDateTimeString();
 
         if ($memoryUsagePercentage >= $memoryThreshold) {
-            if (! $rejectsNewConnections) {
+            if ($rejectsNewConnections === 'no') {
                 $this->info("[{$dateTime}] Pod now rejects connections.");
                 $this->info("[{$dateTime}] Pod uses {$memoryUsagePercentage}, threshold is {$memoryThreshold}.");
             }
 
             $this->rejectNewConnections($pod, $probesToken, $echoAppPort);
         } else {
-            if ($rejectsNewConnections) {
+            if ($rejectsNewConnections === 'yes') {
                 $this->info("[{$dateTime}] Pod now accepts connections (memory usage: {$memoryUsagePercentage}% RAM used.");
                 $this->info("[{$dateTime}] Pod uses {$memoryUsagePercentage}, threshold is {$memoryThreshold}.");
             }
