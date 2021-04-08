@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "29156674e9457444246ba480d1148555",
+    "content-hash": "41bcef15431336572b99d450e058481b",
     "packages": [
         {
             "name": "brick/math",
@@ -768,16 +768,16 @@
         },
         {
             "name": "illuminate/collections",
-            "version": "v8.34.0",
+            "version": "v8.36.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/collections.git",
-                "reference": "e18d6e4cf03dd597bc3ecd86fefc2023d0c7a5e8"
+                "reference": "591e31015a8b0731708c54411cb52d50a00b2bc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/collections/zipball/e18d6e4cf03dd597bc3ecd86fefc2023d0c7a5e8",
-                "reference": "e18d6e4cf03dd597bc3ecd86fefc2023d0c7a5e8",
+                "url": "https://api.github.com/repos/illuminate/collections/zipball/591e31015a8b0731708c54411cb52d50a00b2bc3",
+                "reference": "591e31015a8b0731708c54411cb52d50a00b2bc3",
                 "shasum": ""
             },
             "require": {
@@ -818,7 +818,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2021-03-19T00:05:33+00:00"
+            "time": "2021-04-01T13:26:52+00:00"
         },
         {
             "name": "illuminate/config",
@@ -981,16 +981,16 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v8.34.0",
+            "version": "v8.36.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "121cea1d8b8772bc7fee99c71ecf0f57c1d77b3b"
+                "reference": "5764f703ea8f74ced163125d810951cd5ef2b7e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/121cea1d8b8772bc7fee99c71ecf0f57c1d77b3b",
-                "reference": "121cea1d8b8772bc7fee99c71ecf0f57c1d77b3b",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/5764f703ea8f74ced163125d810951cd5ef2b7e1",
+                "reference": "5764f703ea8f74ced163125d810951cd5ef2b7e1",
                 "shasum": ""
             },
             "require": {
@@ -1025,7 +1025,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2021-03-12T14:45:30+00:00"
+            "time": "2021-04-01T13:09:31+00:00"
         },
         {
             "name": "illuminate/events",
@@ -1204,7 +1204,7 @@
         },
         {
             "name": "illuminate/macroable",
-            "version": "v8.34.0",
+            "version": "v8.36.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
@@ -1354,16 +1354,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v8.34.0",
+            "version": "v8.36.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "b7b27e758b68aad44558c62e7374328835895386"
+                "reference": "26aa01648f348df7b7988ee911cdf98bcaae8ea1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/b7b27e758b68aad44558c62e7374328835895386",
-                "reference": "b7b27e758b68aad44558c62e7374328835895386",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/26aa01648f348df7b7988ee911cdf98bcaae8ea1",
+                "reference": "26aa01648f348df7b7988ee911cdf98bcaae8ea1",
                 "shasum": ""
             },
             "require": {
@@ -1418,7 +1418,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2021-03-21T13:37:37+00:00"
+            "time": "2021-04-06T13:05:53+00:00"
         },
         {
             "name": "illuminate/testing",
@@ -3293,16 +3293,16 @@
         },
         {
             "name": "renoki-co/laravel-php-k8s",
-            "version": "2.1.2",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/renoki-co/laravel-php-k8s.git",
-                "reference": "9147d9a83ccb7937e13602078ce2854dc74fc5be"
+                "reference": "0f1021e443c25385f30efbc19e6b8c2ed56ea39d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/renoki-co/laravel-php-k8s/zipball/9147d9a83ccb7937e13602078ce2854dc74fc5be",
-                "reference": "9147d9a83ccb7937e13602078ce2854dc74fc5be",
+                "url": "https://api.github.com/repos/renoki-co/laravel-php-k8s/zipball/0f1021e443c25385f30efbc19e6b8c2ed56ea39d",
+                "reference": "0f1021e443c25385f30efbc19e6b8c2ed56ea39d",
                 "shasum": ""
             },
             "require": {
@@ -3353,7 +3353,7 @@
             ],
             "support": {
                 "issues": "https://github.com/renoki-co/laravel-php-k8s/issues",
-                "source": "https://github.com/renoki-co/laravel-php-k8s/tree/2.1.2"
+                "source": "https://github.com/renoki-co/laravel-php-k8s/tree/2.3.0"
             },
             "funding": [
                 {
@@ -3361,20 +3361,20 @@
                     "type": "ko_fi"
                 }
             ],
-            "time": "2021-03-24T09:44:25+00:00"
+            "time": "2021-04-06T20:46:59+00:00"
         },
         {
             "name": "renoki-co/php-k8s",
-            "version": "2.4.1",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/renoki-co/php-k8s.git",
-                "reference": "b25b1d8b5735c86191190f118002d4fc6d3bff9a"
+                "reference": "ebf0ec858893748165f9ba58fd0b21beea027c38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/renoki-co/php-k8s/zipball/b25b1d8b5735c86191190f118002d4fc6d3bff9a",
-                "reference": "b25b1d8b5735c86191190f118002d4fc6d3bff9a",
+                "url": "https://api.github.com/repos/renoki-co/php-k8s/zipball/ebf0ec858893748165f9ba58fd0b21beea027c38",
+                "reference": "ebf0ec858893748165f9ba58fd0b21beea027c38",
                 "shasum": ""
             },
             "require": {
@@ -3422,7 +3422,7 @@
             ],
             "support": {
                 "issues": "https://github.com/renoki-co/php-k8s/issues",
-                "source": "https://github.com/renoki-co/php-k8s/tree/2.4.1"
+                "source": "https://github.com/renoki-co/php-k8s/tree/2.5.0"
             },
             "funding": [
                 {
@@ -3430,7 +3430,7 @@
                     "type": "ko_fi"
                 }
             ],
-            "time": "2021-03-26T07:51:35+00:00"
+            "time": "2021-03-31T10:29:20+00:00"
         },
         {
             "name": "symfony/console",
@@ -5112,16 +5112,16 @@
         },
         {
             "name": "symfony/translation",
-            "version": "v5.2.5",
+            "version": "v5.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "0947ab1e3aabd22a6bef393874b2555d2bb976da"
+                "reference": "2cc7f45d96db9adfcf89adf4401d9dfed509f4e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/0947ab1e3aabd22a6bef393874b2555d2bb976da",
-                "reference": "0947ab1e3aabd22a6bef393874b2555d2bb976da",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/2cc7f45d96db9adfcf89adf4401d9dfed509f4e1",
+                "reference": "2cc7f45d96db9adfcf89adf4401d9dfed509f4e1",
                 "shasum": ""
             },
             "require": {
@@ -5185,7 +5185,7 @@
             "description": "Provides tools to internationalize your application",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/translation/tree/v5.2.5"
+                "source": "https://github.com/symfony/translation/tree/v5.2.6"
             },
             "funding": [
                 {
@@ -5201,7 +5201,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-03-06T07:59:01+00:00"
+            "time": "2021-03-23T19:33:48+00:00"
         },
         {
             "name": "symfony/translation-contracts",
@@ -8438,7 +8438,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.3|^8.0"
+        "php": "^7.4|^8.0"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"
