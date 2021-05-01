@@ -23,7 +23,6 @@
         "renoki-co/laravel-php-k8s": "^2.1"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.18",
         "mockery/mockery": "^1.4.2",
         "phpunit/phpunit": "^9.5"
     },
