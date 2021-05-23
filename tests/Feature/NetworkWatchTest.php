@@ -34,23 +34,15 @@ class NetworkWatchTest extends TestCase
         $this->artisan('network:watch', [
             '--pod-namespace' => 'default',
             '--pod-name' => $pod->getName(),
-            '--probes-token' => 'probes-token',
             '--echo-app-port' => 6001,
             '--memory-percent' => 80,
             '--interval' => 1,
             '--test' => true,
         ]);
 
-        Http::assertSent(function (Request $request) {
-            return in_array($request->url(), [
-                'http://localhost:6001/metrics?json=1',
-                'http://localhost:6001/probes/reject-new-connections?token=probes-token',
-            ]);
-        });
-
         $pod->refresh();
 
-        $this->assertEquals('yes', $pod->getLabel('echo.soketi.app/rejects-new-connections'));
+        $this->assertEquals('no', $pod->getLabel('echo.soketi.app/accepts-new-connections'));
     }
 
     public function test_watch_pod_accepting_connections()
@@ -78,22 +70,14 @@ class NetworkWatchTest extends TestCase
         $this->artisan('network:watch', [
             '--pod-namespace' => 'default',
             '--pod-name' => $pod->getName(),
-            '--probes-token' => 'probes-token',
             '--echo-app-port' => 6001,
             '--memory-percent' => 90,
             '--interval' => 1,
             '--test' => true,
         ]);
 
-        Http::assertSent(function (Request $request) {
-            return in_array($request->url(), [
-                'http://localhost:6001/metrics?json=1',
-                'http://localhost:6001/probes/accept-new-connections?token=probes-token',
-            ]);
-        });
-
         $pod->refresh();
 
-        $this->assertEquals('no', $pod->getLabel('echo.soketi.app/rejects-new-connections'));
+        $this->assertEquals('yes', $pod->getLabel('accepts-new-connections'));
     }
 }

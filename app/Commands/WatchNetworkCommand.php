@@ -19,7 +19,6 @@ class WatchNetworkCommand extends Command
     protected $signature = 'network:watch
         {--pod-namespace=default : The Pod namespace. Defaults to the current Pod namespace.}
         {--pod-name=some-pod : The Pod name to watch. Defaults to the current Pod name.}
-        {--probes-token=probes-token : The Probes API token used to update the network probing status.}
         {--echo-app-port=6001 : The Echo App socket port.}
         {--memory-percent=75 : The threshold at which new connections close for a specific server.}
         {--interval=1 : The interval in seconds between each checks.}
@@ -44,7 +43,6 @@ class WatchNetworkCommand extends Command
 
         $podNamespace = env('POD_NAMESPACE') ?: $this->option('pod-namespace');
         $podName = env('POD_NAME') ?: $this->option('pod-name');
-        $probesToken = env('PROBES_TOKEN') ?: $this->option('probes-token');
         $echoAppPort = env('ECHO_APP_PORT') ?: $this->option('echo-app-port');
         $memoryThreshold = env('MEMORY_PERCENT') ?: $this->option('memory-percent');
         $interval = env('CHECKING_INTERVAL') ?: $this->option('interval');
@@ -63,7 +61,7 @@ class WatchNetworkCommand extends Command
                 throw new Exception("Pod {$podNamespace}/{$podName} not found.");
             }
 
-            $this->checkPod($pod, $memoryThreshold, $probesToken, $echoAppPort);
+            $this->checkPod($pod, $memoryThreshold, $echoAppPort);
 
             sleep($interval);
 
@@ -89,14 +87,13 @@ class WatchNetworkCommand extends Command
      *
      * @param  \RenokiCo\PhpK8s\K8sResources\K8sPod  $pod
      * @param  int  $memoryThreshold
-     * @param  string  $probesToken
      * @param  int  $echoAppPort
      * @return void
      */
-    protected function checkPod(K8sPod $pod, int $memoryThreshold, string $probesToken, int $echoAppPort): void
+    protected function checkPod(K8sPod $pod, int $memoryThreshold, int $echoAppPort): void
     {
-        $memoryUsagePercentage = $this->getMemoryUsagePercentage($this->getPodMetrics($pod, $echoAppPort));
-        $rejectsNewConnections = $pod->getLabel('echo.soketi.app/rejects-new-connections', 'no');
+        $memoryUsagePercentage = $this->getMemoryUsagePercentage($this->getPodMetrics($echoAppPort));
+        $rejectsNewConnections = $pod->getLabel('echo.soketi.app/accepts-new-connections', 'yes');
         $dateTime = now()->toDateTimeString();
 
         $this->line("[{$dateTime}] Current memory usage is {$memoryUsagePercentage}%. Checking...", null, 'v');
@@ -106,37 +103,58 @@ class WatchNetworkCommand extends Command
                 $this->info("[{$dateTime}] Pod now rejects connections.");
                 $this->info("[{$dateTime}] Echo container uses {$memoryUsagePercentage}%, threshold is {$memoryThreshold}%");
 
-                $this->rejectNewConnections($pod, $probesToken, $echoAppPort);
+                $this->rejectNewConnections($pod);
             }
         } else {
             if ($rejectsNewConnections === 'yes') {
                 $this->info("[{$dateTime}] Pod now accepts connections.");
                 $this->info("[{$dateTime}] Echo container uses {$memoryUsagePercentage}%, threshold is {$memoryThreshold}%");
 
-                $this->acceptNewConnections($pod, $probesToken, $echoAppPort);
+                $this->acceptNewConnections($pod);
             }
         }
     }
 
-    protected function getPodMetrics(K8sPod $pod, int $echoAppPort): array
+    /**
+     * Get the pod metrics from Prometheus.
+     *
+     * @param  int  $echoAppPort
+     * @return array
+     */
+    protected function getPodMetrics(int $echoAppPort): array
     {
         return Http::get("http://localhost:{$echoAppPort}/metrics?json=1")->json()['data'] ?? [];
     }
 
-    protected function rejectNewConnections(K8sPod $pod, string $probesToken, int $echoAppPort): void
+    /**
+     * Mark the pod as not accepting new connections.
+     *
+     * @param  \RenokiCo\PhpK8s\Kinds\K8sPod  $pod
+     * @return void
+     */
+    protected function rejectNewConnections(K8sPod $pod): void
     {
-        Http::post("http://localhost:{$echoAppPort}/probes/reject-new-connections?token={$probesToken}");
-
-        $this->updatePodLabels($pod, ['echo.soketi.app/rejects-new-connections' => 'yes']);
+        $this->updatePodLabels($pod, ['echo.soketi.app/accepts-new-connections' => 'no']);
     }
 
-    protected function acceptNewConnections(K8sPod $pod, string $probesToken, int $echoAppPort): void
+    /**
+     * Mark the pod as accepting new connections.
+     *
+     * @param  \RenokiCo\PhpK8s\Kinds\K8sPod  $pod
+     * @return void
+     */
+    protected function acceptNewConnections(K8sPod $pod): void
     {
-        Http::post("http://localhost:{$echoAppPort}/probes/accept-new-connections?token={$probesToken}");
-
-        $this->updatePodLabels($pod, ['echo.soketi.app/rejects-new-connections' => 'no']);
+        $this->updatePodLabels($pod, ['echo.soketi.app/accepts-new-connections' => 'yes']);
     }
 
+    /**
+     * Update the given pod's labels.
+     *
+     * @param  \RenokiCo\PhpK8s\Kinds\K8sPod  $pod
+     * @param  array  $newLabels
+     * @return \RenokiCo\PhpK8s\Kinds\K8sPod
+     */
     protected function updatePodLabels(K8sPod $pod, array $newLabels = []): K8sPod
     {
         $labels = array_merge($pod->getLabels(), $newLabels);
