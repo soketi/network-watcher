@@ -14,9 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        K8sPod::macro('getLabel', function (string $name, $default = null) {
-            return $this->getLabels()[$name] ?? $default;
-        });
+        //
     }
 
     /**
