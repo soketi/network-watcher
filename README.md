@@ -16,7 +16,6 @@ Soketi is the service name for the [soketi/echo-server](https://github.com/soket
 ## 🙌 Requirements
 
 - PHP 8.0+
-- Kubernetes v1.20.2 (optional; for Kubernetes-like testing)
 - [Echo Server](https://github.com/soketi/echo-server) 5.0.1+
 
 ## 🚀 Installation
