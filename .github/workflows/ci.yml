@@ -14,7 +14,14 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    name: Testing
+    strategy:
+      matrix:
+        kubernetes:
+          - '1.19.10'
+          - '1.20.6'
+          - '1.21.0'
+
+    name: Testing with K8s v${{ matrix.kubernetes }}
 
     steps:
       - uses: actions/checkout@v2
@@ -36,7 +43,7 @@ jobs:
         name: Setup Minikube
         with:
           minikube version: v1.17.0
-          kubernetes version: "1.20.2"
+          kubernetes version: "v${{ matrix.kubernetes }}"
           github token: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Run Kubernetes Proxy
