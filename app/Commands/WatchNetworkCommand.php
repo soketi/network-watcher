@@ -91,6 +91,11 @@ class WatchNetworkCommand extends Command
      */
     protected function registerPodMacros(): void
     {
+        K8sPod::macro('getLabel', function (string $name, $default = null) {
+            /** @var K8sPod $this */
+            return $this->getLabels()[$name] ?? $default;
+        });
+
         K8sPod::macro('acceptsConnections', function () {
             /** @var K8sPod $this */
             return $this->getLabel('echo.soketi.app/accepts-new-connections', 'yes') === 'yes';
