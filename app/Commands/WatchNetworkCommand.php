@@ -103,7 +103,6 @@ class WatchNetworkCommand extends Command
 
         K8sPod::macro('acceptNewConnections', function () {
             /** @var K8sPod $this */
-
             $labels = array_merge($this->getLabels(), [
                 'echo.soketi.app/accepts-new-connections' => 'yes',
             ]);
@@ -115,7 +114,6 @@ class WatchNetworkCommand extends Command
 
         K8sPod::macro('rejectNewConnections', function () {
             /** @var K8sPod $this */
-
             $labels = array_merge($this->getLabels(), [
                 'echo.soketi.app/accepts-new-connections' => 'no',
             ]);
