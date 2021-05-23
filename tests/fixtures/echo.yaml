@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: echo
-          image: soketi/echo-server:5.0-14.16-alpine
+          image: soketi/echo-server:5.0-14-alpine
           env:
             - name: PRESENCE_STORAGE_DATABASE
               value: socket
