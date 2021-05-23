@@ -73,6 +73,6 @@ class NetworkWatchTest extends TestCase
 
         $pod->refresh();
 
-        $this->assertEquals('yes', $pod->getLabel('accepts-new-connections'));
+        $this->assertEquals('yes', $pod->getLabel('echo.soketi.app/accepts-new-connections'));
     }
 }
