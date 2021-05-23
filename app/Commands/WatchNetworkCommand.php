@@ -164,6 +164,13 @@ class WatchNetworkCommand extends Command
         return $pod;
     }
 
+    /**
+     * Get the memory usage as percentage,
+     * based on the given metrics from Prometheus.
+     *
+     * @param  array  $metrics
+     * @return float
+     */
     protected function getMemoryUsagePercentage(array $metrics): float
     {
         $totalMemoryBytes = $this->getTotalMemoryBytes($metrics);
@@ -175,19 +182,42 @@ class WatchNetworkCommand extends Command
         return $this->getUsedMemoryBytes($metrics) * 100 / $totalMemoryBytes;
     }
 
+    /**
+     * Get the total amount of memory allocated to the Echo Server container,
+     * based on the given metrics from Prometheus.
+     *
+     * @param  array  $metrics
+     * @return int
+     */
     protected function getTotalMemoryBytes(array $metrics): int
     {
         return $this->getMetricValue($metrics, 'echo_server_process_virtual_memory_bytes');
     }
 
+    /**
+     * Get the total amount of memory that's being used by the Echo Server container,
+     * based on the given metrics from Prometheus.
+     *
+     * @param array $metrics
+     * @return int
+     */
     protected function getUsedMemoryBytes(array $metrics): int
     {
         return $this->getMetricValue($metrics, 'echo_server_nodejs_external_memory_bytes') +
             $this->getMetricValue($metrics, 'echo_server_process_resident_memory_bytes');
     }
 
+    /**
+     * Get the Prometheus metric value from the list of metrics.
+     *
+     * @param  array  $metrics
+     * @param  string  $name
+     * @return int
+     */
     protected function getMetricValue(array $metrics, string $name): int
     {
-        return collect($metrics)->where('name', $name)->first()['values'][0]['value'] ?? 0;
+        return collect($metrics)->first(function ($metric) use ($name) {
+            return $metric['name'] === $name;
+        })['values'][0]['value'] ?? 0;
     }
 }
