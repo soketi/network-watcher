@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use RenokiCo\LaravelK8s\LaravelK8sFacade as LaravelK8s;
 use Tests\TestCase;
