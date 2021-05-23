@@ -127,6 +127,13 @@ class WatchNetworkCommand extends Command
 
             return true;
         });
+
+        K8sPod::macro('ensureItHasDefaultLabel', function () {
+            /** @var K8sPod $this */
+            if (! $this->getLabel('echo.soketi.app/accepts-new-connections')) {
+                $this->acceptNewConnections();
+            }
+        });
     }
 
     /**
@@ -143,6 +150,8 @@ class WatchNetworkCommand extends Command
         $dateTime = now()->toDateTimeString();
 
         $this->line("[{$dateTime}] Current memory usage is {$memoryUsagePercentage}%. Checking...", null, 'v');
+
+        $pod->ensureItHasDefaultLabel();
 
         if ($memoryUsagePercentage >= $memoryThreshold) {
             if ($pod->acceptsConnections()) {
