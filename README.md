@@ -17,7 +17,7 @@ Soketi is the service name for the [soketi/echo-server](https://github.com/soket
 
 - PHP 8.0+
 - Kubernetes v1.20.2 (optional; for Kubernetes-like testing)
-- [Echo Server](https://github.com/soketi/echo-server) 4.2+
+- [Echo Server](https://github.com/soketi/echo-server) 5.0.1+
 
 ## 🚀 Installation
 
@@ -37,7 +37,6 @@ $ php application network:watch
 | - | - | - | - |
 | `POD_NAMESPACE` | `--pod-namespace` | `default` | The Pod namespce to watch. |
 | `POD_NAME` | `--pod-name` | `some-pod` | The Pod name to watch. |
-| `PROBES_TOKEN` | `--probes-token` | `probes-token` | The token used for the [probes API](https://github.com/soketi/echo-server/blob/master/docs/ENV.md#probes-api). |
 | `ECHO_APP_PORT` | `--echo-app-port` | `6001` | The port number for the [Echo Server](https://github.com/soketi/echo-server) app. |
 | `MEMORY_PERCENT` | `--memory-percent` | `75` | The threshold (in percent) that, once reached, the Pod will be marked as "not ready" to evict any new connections or requests. |
 | `CHECKING_INTERVAL` | `--checking-interval` | `1` | The amount of seconds to wait between API checks. |
