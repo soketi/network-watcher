@@ -15,7 +15,7 @@ Monitor the [Echo Server](https://github.com/soketi/echo-server) container for m
 
 If you run Echo Server standalone in a cluster, at scale, you might run into capacity issues: RAM usage might be near the limit and even if you decide to horizontally scale the pods, new connections might still come to pods that are near-limit and run into OOM at some point.
 
-Running Network Watcher inside the same pod will solve the issues by continuously checking the current pod using [Prometheus](https://github.com/soketi/echo-server/blob/master/docs/ENV.md#prometheus), labeling the pods that get over a specified threshold with `echo.soketi.app/accepts-new-connections: "no"`, so that the services watching for the pods will ignore them if also checking for this label:
+Running Network Watcher inside the same pod will solve the issues by continuously checking the current pod using [Prometheus](https://github.com/soketi/echo-server/blob/master/docs/ENV.md#prometheus) (**Prometheus server is not needed!**), labeling the pods that get over a specified threshold with `echo.soketi.app/accepts-new-connections: "no"`, so that the services watching for the pods will ignore them if also checking for this label:
 
 ```yaml
 spec:
@@ -33,11 +33,11 @@ spec:
 ## 🙌 Requirements
 
 - PHP 8.0+
-- [Echo Server](https://github.com/soketi/echo-server) 5.0.1+ with Prometheus stats enabled
+- [Echo Server](https://github.com/soketi/echo-server) 5.0.1+
 
 ## Configuring for Prometheus
 
-Prometheus is needed to monitor RAM usage for the Echo Server container. You need to just configure the [Prometheus connection](https://github.com/soketi/echo-server/blob/master/docs/ENV.md#prometheus), it's not a must to enable the Echo Server stats for the internal applications.
+Prometheus is needed to monitor RAM usage for the Echo Server container. You need to just turn on the [Prometheus data collection](https://github.com/soketi/echo-server/blob/master/docs/ENV.md#prometheus). A Prometheus server is not required as the role of the Prometheus client is only to monitor the memory usage.
 
 ## Docker image
 
