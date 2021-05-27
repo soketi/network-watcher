@@ -50,7 +50,6 @@ trait ChecksCurrentPod
     protected function rejectNewConnections(float $memoryUsagePercentage, float $memoryThreshold): void
     {
         /** @var \App\Commands\WatchNetworkCommand $this */
-
         $this->pod->rejectNewConnections();
 
         $now = now()->toIso8601String();
@@ -74,7 +73,6 @@ trait ChecksCurrentPod
     protected function acceptNewConnections(float $memoryUsagePercentage, float $memoryThreshold): void
     {
         /** @var \App\Commands\WatchNetworkCommand $this */
-
         $this->pod->acceptNewConnections();
 
         $now = now()->toIso8601String();
