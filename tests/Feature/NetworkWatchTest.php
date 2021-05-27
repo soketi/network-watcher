@@ -146,7 +146,7 @@ class NetworkWatchTest extends TestCase
             'echo.soketi.app/accepts-new-connections' => $accept ? 'yes' : 'no',
         ]);
 
-        $pod->setLabels($labels)->update();
+        $pod->refresh()->setLabels($labels)->update();
 
         return $pod;
     }
