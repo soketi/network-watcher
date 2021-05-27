@@ -9,14 +9,41 @@ Echo Network Watcher
 ![v1.20.6 K8s Version](https://img.shields.io/badge/K8s%20v1.20.6-Ready-%23326ce5?colorA=306CE8&colorB=green)
 ![v1.21.0 K8s Version](https://img.shields.io/badge/K8s%20v1.21.0-Ready-%23326ce5?colorA=306CE8&colorB=green)
 
-Laravel Zero-based app that monitors Echo container and manages the new, incoming connections, within a Kubernetes cluster.
+Monitor the [Echo Server](https://github.com/soketi/echo-server) container for memory allowance and new connections when running in Kubernetes.
 
-Soketi is the service name for the [soketi/echo-server](https://github.com/soketi/echo-server) project that runs a SaaS and a Dashboard that will allow users to connect via the Soketi Fleet, written for Kubernetes.
+## 🤔 What does this controller solve?
+
+If you run Echo Server standalone in a cluster, at scale, you might run into capacity issues: RAM usage might be near the limit and even if you decide to horizontally scale the pods, new connections might still come to pods that are near-limit and run into OOM at some point.
+
+Running Network Watcher inside the same pod will solve the issues by continuously checking the current pod using [Prometheus](https://github.com/soketi/echo-server/blob/master/docs/ENV.md#prometheus), labeling the pods that get over a specified threshold with `echo.soketi.app/accepts-new-connections: "no"`, so that the services watching for the pods will ignore them if also checking for this label:
+
+```yaml
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 6001
+      targetPort: 6001
+      protocol: TCP
+      name: echo
+  selector:
+    ...
+    echo.soketi.app/accepts-new-connections: "yes"
+```
 
 ## 🙌 Requirements
 
 - PHP 8.0+
-- [Echo Server](https://github.com/soketi/echo-server) 5.0.1+
+- [Echo Server](https://github.com/soketi/echo-server) 5.0.1+ with Prometheus stats enabled
+
+## Configuring for Prometheus
+
+Prometheus is needed to monitor RAM usage for the Echo Server container. You need to just configure the [Prometheus connection](https://github.com/soketi/echo-server/blob/master/docs/ENV.md#prometheus), it's not a must to enable the Echo Server stats for the internal applications.
+
+## Docker image
+
+[Network Watcher is available via Docker](https://hub.docker.com/r/soketi/network-watcher). Use the images to run them into your cluster and use this project to develop the application.
+
+[Network Watcher also comes with the Echo Server Helm chart](https://github.com/soketi/charts/tree/master/charts/echo-server). It just needs to be turned on if you need the network watcher and the according service annotations will be appended automatically.
 
 ## 🚀 Installation
 
