@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use RenokiCo\PhpK8s\Kinds\K8sPod;
 
 class AppServiceProvider extends ServiceProvider
 {
