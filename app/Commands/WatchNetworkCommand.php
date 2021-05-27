@@ -94,14 +94,14 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
         $podNamespace = env('POD_NAMESPACE') ?: $this->option('pod-namespace');
         $podName = env('POD_NAME') ?: $this->option('pod-name');
         $echoAppPort = env('ECHO_APP_PORT') ?: $this->option('echo-app-port');
-        $memoryThreshold = env('MEMORY_PERCENT') ?: $this->option('memory-percent');
+        $memoryThresholdPercent = env('MEMORY_PERCENT') ?: $this->option('memory-percent');
         $interval = env('CHECKING_INTERVAL') ?: $this->option('interval');
         $test = is_bool(env('TEST_MODE')) ? env('TEST_MODE') : $this->option('test');
 
         $this->line("Namespace: {$podNamespace}");
         $this->line("Pod name: {$podName}");
         $this->line("Echo port: {$echoAppPort}");
-        $this->line("Memory threshold: {$memoryThreshold}%");
+        $this->line("Memory threshold: {$memoryThresholdPercent}%");
         $this->line("Monitoring interval: {$interval}s");
 
         $this->setPod(
@@ -113,7 +113,7 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
         }
 
         while (true) {
-            $this->checkPod($memoryThreshold, $echoAppPort);
+            $this->checkPod($memoryThresholdPercent, $echoAppPort);
 
             sleep($interval);
 

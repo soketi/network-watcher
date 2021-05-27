@@ -28,11 +28,7 @@ class NetworkWatchTest extends TestCase
         $pod = $this->makePodAcceptNewConnections($pod, true);
 
         Http::fakeSequence()->push([
-            'data' => [
-                ['name' => 'echo_server_process_virtual_memory_bytes', 'values' => [['value' => 104857600]]], // 100 MB
-                ['name' => 'echo_server_process_resident_memory_bytes', 'values' => [['value' => 83886080]]], // 80 MB @ 80% usage
-                ['name' => 'echo_server_nodejs_external_memory_bytes', 'values' => [['value' => 0]]],
-            ],
+            'memory' => ['percent' => 80.00],
         ]);
 
         $this->artisan('network:watch', [
@@ -73,11 +69,7 @@ class NetworkWatchTest extends TestCase
         $pod = $this->makePodAcceptNewConnections($pod, false);
 
         Http::fakeSequence()->push([
-            'data' => [
-                ['name' => 'echo_server_process_virtual_memory_bytes', 'values' => [['value' => 104857600]]], // 100 MB
-                ['name' => 'echo_server_process_resident_memory_bytes', 'values' => [['value' => 83886080]]], // 80 MB @ 80% usage
-                ['name' => 'echo_server_nodejs_external_memory_bytes', 'values' => [['value' => 0]]],
-            ],
+            'memory' => ['percent' => 80.00],
         ]);
 
         $this->artisan('network:watch', [
