@@ -9,11 +9,11 @@ trait ChecksCurrentPod
     /**
      * Check the pod metrics to adjust new connection allowance.
      *
-     * @param  int  $memoryThreshold
+     * @param  float  $memoryThreshold
      * @param  int  $echoAppPort
      * @return void
      */
-    protected function checkPod(int $memoryThreshold, int $echoAppPort): void
+    protected function checkPod(float $memoryThreshold, int $echoAppPort): void
     {
         /** @var \App\Commands\WatchNetworkCommand $this */
         $memoryUsagePercentage = $this->getMemoryUsagePercentage($this->getEchoServerMetrics($echoAppPort));
@@ -28,16 +28,64 @@ trait ChecksCurrentPod
                 $this->info("[{$dateTime}] Pod now rejects connections.");
                 $this->info("[{$dateTime}] Echo container uses {$memoryUsagePercentage}%, threshold is {$memoryThreshold}%");
 
-                $this->pod->rejectNewConnections();
+                $this->rejectNewConnections($memoryUsagePercentage, $memoryThreshold);
             }
         } else {
             if ($this->pod->rejectsConnections()) {
                 $this->info("[{$dateTime}] Pod now accepts connections.");
                 $this->info("[{$dateTime}] Echo container uses {$memoryUsagePercentage}%, threshold is {$memoryThreshold}%");
 
-                $this->pod->acceptNewConnections();
+                $this->acceptNewConnections($memoryUsagePercentage, $memoryThreshold);
             }
         }
+    }
+
+    /**
+     * Mark the Pod as rejecting new connections.
+     *
+     * @param  float  $memoryUsagePercentage
+     * @param  float  $memoryThreshold
+     * @return void
+     */
+    protected function rejectNewConnections(float $memoryUsagePercentage, float $memoryThreshold): void
+    {
+        /** @var \App\Commands\WatchNetworkCommand $this */
+
+        $this->pod->rejectNewConnections();
+
+        $now = now()->toIso8601String();
+
+        $this->pod->newEvent()
+            ->setMessage("Rejecting new connections. Echo container uses {$memoryUsagePercentage}%, threshold is {$memoryThreshold}%")
+            ->setReason('OverThreshold')
+            ->setType('Warning')
+            ->setFirstTimestamp($now)
+            ->setLastTimestamp($now)
+            ->create();
+    }
+
+    /**
+     * Mark the Pod as accepting new connections.
+     *
+     * @param  float  $memoryUsagePercentage
+     * @param  float  $memoryThreshold
+     * @return void
+     */
+    protected function acceptNewConnections(float $memoryUsagePercentage, float $memoryThreshold): void
+    {
+        /** @var \App\Commands\WatchNetworkCommand $this */
+
+        $this->pod->acceptNewConnections();
+
+        $now = now()->toIso8601String();
+
+        $this->pod->newEvent()
+            ->setMessage("Accepting new connections. Echo container uses {$memoryUsagePercentage}%, threshold is {$memoryThreshold}%")
+            ->setReason('BelowThreshold')
+            ->setType('Normal')
+            ->setFirstTimestamp($now)
+            ->setLastTimestamp($now)
+            ->create();
     }
 
     /**

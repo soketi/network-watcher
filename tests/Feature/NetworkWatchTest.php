@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Commands\WatchNetworkCommand;
 use Illuminate\Support\Facades\Http;
 use RenokiCo\LaravelK8s\LaravelK8sFacade as LaravelK8s;
+use RenokiCo\PhpK8s\Kinds\K8sPod;
 use Symfony\Component\Console\Input\InputOption;
 use Tests\TestCase;
 
@@ -23,6 +24,8 @@ class NetworkWatchTest extends TestCase
 
         /** @var \RenokiCo\PhpK8s\Kinds\K8sPod $pod */
         $pod = $deployment->getPods()->first();
+
+        $pod = $this->makePodAcceptNewConnections($pod, true);
 
         Http::fakeSequence()->push([
             'data' => [
@@ -44,6 +47,13 @@ class NetworkWatchTest extends TestCase
         $pod->refresh();
 
         $this->assertEquals('no', $pod->getLabel('echo.soketi.app/accepts-new-connections'));
+
+        $event = $pod->getEvents()->reverse()->first(function ($event) use ($pod) {
+            return $event->getAttribute('involvedObject.name') === $pod->getName() &&
+                $event->getReason() === 'OverThreshold';
+        });
+
+        $this->assertNotNull($event);
     }
 
     public function test_watch_pod_accepting_connections()
@@ -59,6 +69,8 @@ class NetworkWatchTest extends TestCase
 
         /** @var \RenokiCo\PhpK8s\Kinds\K8sPod $pod */
         $pod = $deployment->getPods()->first();
+
+        $pod = $this->makePodAcceptNewConnections($pod, false);
 
         Http::fakeSequence()->push([
             'data' => [
@@ -96,11 +108,7 @@ class NetworkWatchTest extends TestCase
         /** @var \RenokiCo\PhpK8s\Kinds\K8sPod $pod */
         $pod = $deployment->getPods()->first();
 
-        $labels = array_merge($pod->getLabels(), [
-            'echo.soketi.app/accepts-new-connections' => 'yes',
-        ]);
-
-        $pod->refresh()->setLabels($labels)->update();
+        $pod = $this->makePodAcceptNewConnections($pod, true);
 
         $this->assertEquals('yes', $pod->getLabel('echo.soketi.app/accepts-new-connections'));
 
@@ -116,5 +124,30 @@ class NetworkWatchTest extends TestCase
         $pod->refresh();
 
         $this->assertEquals('no', $pod->getLabel('echo.soketi.app/accepts-new-connections'));
+
+        $event = $pod->getEvents()->reverse()->first(function ($event) use ($pod) {
+            return $event->getAttribute('involvedObject.name') === $pod->getName() &&
+                $event->getReason() === 'BelowThreshold';
+        });
+
+        $this->assertNotNull($event);
+    }
+
+    /**
+     * Make the given pod accept or reject connections on-call.
+     *
+     * @param  \RenokiCo\PhpK8s\Kinds\K8sPod  $pod
+     * @param  bool  $accept
+     * @return \RenokiCo\PhpK8s\Kinds\K8sPod
+     */
+    protected function makePodAcceptNewConnections(K8sPod $pod, $accept = true)
+    {
+        $labels = array_merge($pod->getLabels(), [
+            'echo.soketi.app/accepts-new-connections' => $accept ? 'yes' : 'no',
+        ]);
+
+        $pod->setLabels($labels)->update();
+
+        return $pod;
     }
 }
