@@ -2,15 +2,18 @@
 
 namespace App\Commands;
 
+use App\Concerns\ChecksCurrentPod;
 use Exception;
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Support\Facades\Http;
 use LaravelZero\Framework\Commands\Command;
 use RenokiCo\LaravelK8s\LaravelK8sFacade as LaravelK8s;
 use RenokiCo\PhpK8s\Kinds\K8sPod;
+use Symfony\Component\Console\Command\SignalableCommandInterface;
 
-class WatchNetworkCommand extends Command
+class WatchNetworkCommand extends Command implements SignalableCommandInterface
 {
+    use ChecksCurrentPod;
+
     /**
      * The signature of the command.
      *
@@ -33,6 +36,53 @@ class WatchNetworkCommand extends Command
     protected $description = 'Run the Network watcher controller for the Echo app.';
 
     /**
+     * The current pod the instance is running into.
+     *
+     * @var K8sPod
+     */
+    protected K8sPod $pod;
+
+    /**
+     * Initialize the command.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->registerPodMacros();
+    }
+
+    /**
+     * Returns the list of signals to subscribe.
+     *
+     * @return array
+     */
+    public function getSubscribedSignals(): array
+    {
+        return [
+            SIGINT,
+            SIGTERM,
+        ];
+    }
+
+    /**
+     * The method will be called when the application is signaled.
+     *
+     * @param  int  $signal
+     * @return void
+     */
+    public function handleSignal(int $signal): void
+    {
+        // Simply just mark the pod as rejecting the new connections while it's terminating.
+        // This way, the Echo Server will close all existing connections internally,
+        // but the Network Watcher will also mark the pod as not being able to receive new connections for
+        // the sole purpose of redirecting the traffic to other pods.
+        $this->pod->rejectNewConnections();
+    }
+
+    /**
      * Execute the console command.
      *
      * @return mixed
@@ -40,8 +90,6 @@ class WatchNetworkCommand extends Command
     public function handle()
     {
         $this->line('Starting the watcher...');
-
-        $this->registerPodMacros();
 
         $podNamespace = env('POD_NAMESPACE') ?: $this->option('pod-namespace');
         $podName = env('POD_NAME') ?: $this->option('pod-name');
@@ -56,14 +104,16 @@ class WatchNetworkCommand extends Command
         $this->line("Memory threshold: {$memoryThreshold}%");
         $this->line("Monitoring interval: {$interval}s");
 
+        $this->setPod(
+            LaravelK8s::getPodByName($podName, $podNamespace)
+        );
+
+        if (! $this->pod) {
+            throw new Exception("Pod {$podNamespace}/{$podName} not found.");
+        }
+
         while (true) {
-            $pod = LaravelK8s::getPodByName($podName, $podNamespace);
-
-            if (! $pod) {
-                throw new Exception("Pod {$podNamespace}/{$podName} not found.");
-            }
-
-            $this->checkPod($pod, $memoryThreshold, $echoAppPort);
+            $this->checkPod($memoryThreshold, $echoAppPort);
 
             sleep($interval);
 
@@ -137,104 +187,15 @@ class WatchNetworkCommand extends Command
     }
 
     /**
-     * Check the pod metrics to adjust new connection allowance.
+     * Set the pod.
      *
-     * @param  \RenokiCo\PhpK8s\K8sResources\K8sPod  $pod
-     * @param  int  $memoryThreshold
-     * @param  int  $echoAppPort
-     * @return void
+     * @param  \RenokiCo\PhpK8s\Kinds\K8sPod  $pod
+     * @return self
      */
-    protected function checkPod(K8sPod $pod, int $memoryThreshold, int $echoAppPort): void
+    public function setPod(K8sPod $pod)
     {
-        $memoryUsagePercentage = $this->getMemoryUsagePercentage($this->getEchoServerMetrics($echoAppPort));
-        $dateTime = now()->toDateTimeString();
+        $this->pod = $pod;
 
-        $this->line("[{$dateTime}] Current memory usage is {$memoryUsagePercentage}%. Checking...", null, 'v');
-
-        $pod->ensureItHasDefaultLabel();
-
-        if ($memoryUsagePercentage >= $memoryThreshold) {
-            if ($pod->acceptsConnections()) {
-                $this->info("[{$dateTime}] Pod now rejects connections.");
-                $this->info("[{$dateTime}] Echo container uses {$memoryUsagePercentage}%, threshold is {$memoryThreshold}%");
-
-                $pod->rejectNewConnections();
-            }
-        } else {
-            if ($pod->rejectsConnections()) {
-                $this->info("[{$dateTime}] Pod now accepts connections.");
-                $this->info("[{$dateTime}] Echo container uses {$memoryUsagePercentage}%, threshold is {$memoryThreshold}%");
-
-                $pod->acceptNewConnections();
-            }
-        }
-    }
-
-    /**
-     * Get the pod metrics from Prometheus.
-     *
-     * @param  int  $echoAppPort
-     * @return array
-     */
-    protected function getEchoServerMetrics(int $echoAppPort): array
-    {
-        return Http::get("http://localhost:{$echoAppPort}/metrics?json=1")->json()['data'] ?? [];
-    }
-
-    /**
-     * Get the memory usage as percentage,
-     * based on the given metrics from Prometheus.
-     *
-     * @param  array  $metrics
-     * @return float
-     */
-    protected function getMemoryUsagePercentage(array $metrics): float
-    {
-        $totalMemoryBytes = $this->getTotalMemoryBytes($metrics);
-
-        if ($totalMemoryBytes === 0) {
-            return 0.00;
-        }
-
-        return $this->getUsedMemoryBytes($metrics) * 100 / $totalMemoryBytes;
-    }
-
-    /**
-     * Get the total amount of memory allocated to the Echo Server container,
-     * based on the given metrics from Prometheus.
-     *
-     * @param  array  $metrics
-     * @return int
-     */
-    protected function getTotalMemoryBytes(array $metrics): int
-    {
-        return $this->getMetricValue($metrics, 'echo_server_process_virtual_memory_bytes');
-    }
-
-    /**
-     * Get the total amount of memory that's being used by the Echo Server container,
-     * based on the given metrics from Prometheus.
-     *
-     * @param array $metrics
-     * @return int
-     */
-    protected function getUsedMemoryBytes(array $metrics): int
-    {
-        return $this->getMetricValue($metrics, 'echo_server_nodejs_external_memory_bytes') +
-            $this->getMetricValue($metrics, 'echo_server_process_resident_memory_bytes');
-    }
-
-    /**
-     * Get the Prometheus metric value from the list of metrics.
-     *
-     * @param  array  $metrics
-     * @param  string  $name
-     * @return int
-     */
-    protected function getMetricValue(array $metrics, string $name): int
-    {
-        return collect($metrics)->first(function ($metric) use ($name) {
-            return $metric['name'] === $name;
-        })['values'][0]['value'] ?? 0;
+        return $this;
     }
 }
