@@ -26,6 +26,9 @@
         "mockery/mockery": "^1.4.2",
         "phpunit/phpunit": "^9.5"
     },
+    "suggest": {
+        "ext-pcntl": "The command needs pcntl to listen to SIGINT/SIGTERM signals."
+    },
     "autoload": {
         "psr-4": {
             "App\\": "app/"
