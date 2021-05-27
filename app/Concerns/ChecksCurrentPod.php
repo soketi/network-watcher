@@ -16,7 +16,6 @@ trait ChecksCurrentPod
     protected function checkPod(int $memoryThreshold, int $echoAppPort): void
     {
         /** @var \App\Commands\WatchNetworkCommand $this */
-
         $memoryUsagePercentage = $this->getMemoryUsagePercentage($this->getEchoServerMetrics($echoAppPort));
         $dateTime = now()->toDateTimeString();
 
