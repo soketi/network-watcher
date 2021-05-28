@@ -16,7 +16,7 @@ trait ChecksCurrentPod
     protected function checkPod(float $memoryThresholdPercent, int $echoAppPort): void
     {
         /** @var \App\Commands\WatchNetworkCommand $this */
-        $usedMemoryPercent = $this->getMemoryUsagePercent($echoAppPort);
+        $usedMemoryPercent = $this->getEchoServerMemoryUsagePercent($echoAppPort);
         $dateTime = now()->toDateTimeString();
 
         $this->line("[{$dateTime}] Current memory usage is {$usedMemoryPercent}%. Checking...", null, 'v');
@@ -103,7 +103,7 @@ trait ChecksCurrentPod
      * @param  int  $echoAppPort
      * @return float
      */
-    protected function getEchoServerMemoryUsage(int $echoAppPort): float
+    protected function getEchoServerMemoryUsagePercent(int $echoAppPort): float
     {
         $usage = $this->getUsage($echoAppPort);
 
