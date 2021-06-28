@@ -52,7 +52,7 @@ jobs:
 
       - name: Load Kubernetes fixtures
         run: |
-          kubectl apply -f tests/fixtures/echo.yaml
+          kubectl apply -f tests/fixtures/pws.yaml
 
       - name: Copy environment variables
         run: |

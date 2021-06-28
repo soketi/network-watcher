@@ -10,13 +10,13 @@ trait ChecksCurrentPod
      * Check the pod metrics to adjust new connection allowance.
      *
      * @param  float  $memoryThresholdPercent
-     * @param  int  $echoAppPort
+     * @param  int  $serverPort
      * @return void
      */
-    protected function checkPod(float $memoryThresholdPercent, int $echoAppPort): void
+    protected function checkPod(float $memoryThresholdPercent, int $serverPort): void
     {
         /** @var \App\Commands\WatchNetworkCommand $this */
-        $usedMemoryPercent = $this->getEchoServerMemoryUsagePercent($echoAppPort);
+        $usedMemoryPercent = $this->getServerMemoryUsagePercent($serverPort);
         $dateTime = now()->toDateTimeString();
 
         $this->line("[{$dateTime}] Current memory usage is {$usedMemoryPercent}%. Checking...", null, 'v');
@@ -26,14 +26,14 @@ trait ChecksCurrentPod
         if ($usedMemoryPercent >= $memoryThresholdPercent) {
             if ($this->pod->acceptsConnections()) {
                 $this->info("[{$dateTime}] Pod now rejects connections.");
-                $this->info("[{$dateTime}] Echo container uses {$usedMemoryPercent}%, threshold is {$memoryThresholdPercent}%");
+                $this->info("[{$dateTime}] Server container uses {$usedMemoryPercent}%, threshold is {$memoryThresholdPercent}%");
 
                 $this->rejectNewConnections($usedMemoryPercent, $memoryThresholdPercent);
             }
         } else {
             if ($this->pod->rejectsConnections()) {
                 $this->info("[{$dateTime}] Pod now accepts connections.");
-                $this->info("[{$dateTime}] Echo container uses {$usedMemoryPercent}%, threshold is {$memoryThresholdPercent}%");
+                $this->info("[{$dateTime}] Server container uses {$usedMemoryPercent}%, threshold is {$memoryThresholdPercent}%");
 
                 $this->acceptNewConnections($usedMemoryPercent, $memoryThresholdPercent);
             }
@@ -55,7 +55,7 @@ trait ChecksCurrentPod
         $now = now()->toIso8601String();
 
         $this->pod->newEvent()
-            ->setMessage("Rejecting new connections. Echo container uses {$usedMemoryPercent}%, threshold is {$memoryThresholdPercent}%")
+            ->setMessage("Rejecting new connections. Server container uses {$usedMemoryPercent}%, threshold is {$memoryThresholdPercent}%")
             ->setReason('OverThreshold')
             ->setType('Warning')
             ->setFirstTimestamp($now)
@@ -78,7 +78,7 @@ trait ChecksCurrentPod
         $now = now()->toIso8601String();
 
         $this->pod->newEvent()
-            ->setMessage("Accepting new connections. Echo container uses {$usedMemoryPercent}%, threshold is {$memoryThresholdPercent}%")
+            ->setMessage("Accepting new connections. Server container uses {$usedMemoryPercent}%, threshold is {$memoryThresholdPercent}%")
             ->setReason('BelowThreshold')
             ->setType('Normal')
             ->setFirstTimestamp($now)
@@ -89,23 +89,23 @@ trait ChecksCurrentPod
     /**
      * Get the pod metrics from the Usage API.
      *
-     * @param  int  $echoAppPort
+     * @param  int  $serverPort
      * @return array
      */
-    protected function getUsage(int $echoAppPort): array
+    protected function getUsage(int $serverPort): array
     {
-        return Http::get("http://localhost:{$echoAppPort}/usage")->json();
+        return Http::get("http://localhost:{$serverPort}/usage")->json();
     }
 
     /**
      * Get the percent of used memory from the Usage API.
      *
-     * @param  int  $echoAppPort
+     * @param  int  $serverPort
      * @return float
      */
-    protected function getEchoServerMemoryUsagePercent(int $echoAppPort): float
+    protected function getServerMemoryUsagePercent(int $serverPort): float
     {
-        $usage = $this->getUsage($echoAppPort);
+        $usage = $this->getUsage($serverPort);
 
         return $usage['memory']['percent'] ?? 0.00;
     }

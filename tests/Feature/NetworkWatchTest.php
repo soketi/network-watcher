@@ -14,7 +14,7 @@ class NetworkWatchTest extends TestCase
     public function test_watch_pod_rejecting_connections()
     {
         /** @var \RenokiCo\PhpK8s\Kinds\K8sDeployment $deployment */
-        $deployment = LaravelK8s::getDeploymentByName('echo-server-test');
+        $deployment = LaravelK8s::getDeploymentByName('pws-server-test');
 
         while (! $deployment->allPodsAreRunning()) {
             echo "Waiting for {$deployment->getName()} deployment to have pods running...";
@@ -34,7 +34,7 @@ class NetworkWatchTest extends TestCase
         $this->artisan('network:watch', [
             '--pod-namespace' => 'default',
             '--pod-name' => $pod->getName(),
-            '--echo-app-port' => 6001,
+            '--server-port' => 6001,
             '--memory-percent' => 80,
             '--interval' => 1,
             '--test' => true,
@@ -42,7 +42,7 @@ class NetworkWatchTest extends TestCase
 
         $pod->refresh();
 
-        $this->assertEquals('no', $pod->getLabel('echo.soketi.app/accepts-new-connections'));
+        $this->assertEquals('no', $pod->getLabel('pws.soketi.app/accepts-new-connections'));
 
         $event = $pod->getEvents()->reverse()->first(function ($event) use ($pod) {
             return $event->getAttribute('involvedObject.name') === $pod->getName() &&
@@ -55,7 +55,7 @@ class NetworkWatchTest extends TestCase
     public function test_watch_pod_accepting_connections()
     {
         /** @var \RenokiCo\PhpK8s\Kinds\K8sDeployment $deployment */
-        $deployment = LaravelK8s::getDeploymentByName('echo-server-test');
+        $deployment = LaravelK8s::getDeploymentByName('pws-server-test');
 
         while (! $deployment->allPodsAreRunning()) {
             echo "Waiting for {$deployment->getName()} deployment to have pods running...";
@@ -75,7 +75,7 @@ class NetworkWatchTest extends TestCase
         $this->artisan('network:watch', [
             '--pod-namespace' => 'default',
             '--pod-name' => $pod->getName(),
-            '--echo-app-port' => 6001,
+            '--server-port' => 6001,
             '--memory-percent' => 90,
             '--interval' => 1,
             '--test' => true,
@@ -83,13 +83,13 @@ class NetworkWatchTest extends TestCase
 
         $pod->refresh();
 
-        $this->assertEquals('yes', $pod->getLabel('echo.soketi.app/accepts-new-connections'));
+        $this->assertEquals('yes', $pod->getLabel('pws.soketi.app/accepts-new-connections'));
     }
 
     public function test_signaling_should_incapacitate_the_pod()
     {
         /** @var \RenokiCo\PhpK8s\Kinds\K8sDeployment $deployment */
-        $deployment = LaravelK8s::getDeploymentByName('echo-server-test');
+        $deployment = LaravelK8s::getDeploymentByName('pws-server-test');
 
         while (! $deployment->allPodsAreRunning()) {
             echo "Waiting for {$deployment->getName()} deployment to have pods running...";
@@ -102,7 +102,7 @@ class NetworkWatchTest extends TestCase
 
         $pod = $this->makePodAcceptNewConnections($pod, true);
 
-        $this->assertEquals('yes', $pod->getLabel('echo.soketi.app/accepts-new-connections'));
+        $this->assertEquals('yes', $pod->getLabel('pws.soketi.app/accepts-new-connections'));
 
         /** @var WatchNetworkCommand $command */
         $command = app(WatchNetworkCommand::class);
@@ -115,7 +115,7 @@ class NetworkWatchTest extends TestCase
 
         $pod->refresh();
 
-        $this->assertEquals('no', $pod->getLabel('echo.soketi.app/accepts-new-connections'));
+        $this->assertEquals('no', $pod->getLabel('pws.soketi.app/accepts-new-connections'));
 
         $event = $pod->getEvents()->reverse()->first(function ($event) use ($pod) {
             return $event->getAttribute('involvedObject.name') === $pod->getName() &&
@@ -135,7 +135,7 @@ class NetworkWatchTest extends TestCase
     protected function makePodAcceptNewConnections(K8sPod $pod, $accept = true)
     {
         $labels = array_merge($pod->getLabels(), [
-            'echo.soketi.app/accepts-new-connections' => $accept ? 'yes' : 'no',
+            'pws.soketi.app/accepts-new-connections' => $accept ? 'yes' : 'no',
         ]);
 
         $pod->refresh()->setLabels($labels)->update();
