@@ -22,7 +22,7 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
     protected $signature = 'network:watch
         {--pod-namespace=default : The Pod namespace. Defaults to the current Pod namespace.}
         {--pod-name=some-pod : The Pod name to watch. Defaults to the current Pod name.}
-        {--echo-app-port=6001 : The Echo App socket port.}
+        {--server-port=6001 : The Server port.}
         {--memory-percent=75 : The threshold at which new connections close for a specific server.}
         {--interval=1 : The interval in seconds between each checks.}
         {--test : Run only one loop for testing.}
@@ -33,7 +33,7 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
      *
      * @var string
      */
-    protected $description = 'Run the Network watcher controller for the Echo app.';
+    protected $description = 'Run the Network watcher controller for the pWS server.';
 
     /**
      * The current pod the instance is running into.
@@ -76,7 +76,7 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
     public function handleSignal(int $signal): void
     {
         // Simply just mark the pod as rejecting the new connections while it's terminating.
-        // This way, the Echo Server will close all existing connections internally,
+        // This way, the pWS Server will close all existing connections internally,
         // but the Network Watcher will also mark the pod as not being able to receive new connections for
         // the sole purpose of redirecting the traffic to other pods.
         $this->pod->rejectNewConnections();
@@ -93,14 +93,14 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
 
         $podNamespace = env('POD_NAMESPACE') ?: $this->option('pod-namespace');
         $podName = env('POD_NAME') ?: $this->option('pod-name');
-        $echoAppPort = env('ECHO_APP_PORT') ?: $this->option('echo-app-port');
+        $serverPort = env('SERVER_PORT') ?: $this->option('server-port');
         $memoryThresholdPercent = env('MEMORY_PERCENT') ?: $this->option('memory-percent');
         $interval = env('CHECKING_INTERVAL') ?: $this->option('interval');
         $test = is_bool(env('TEST_MODE')) ? env('TEST_MODE') : $this->option('test');
 
         $this->line("Namespace: {$podNamespace}");
         $this->line("Pod name: {$podName}");
-        $this->line("Echo port: {$echoAppPort}");
+        $this->line("Server port: {$serverPort}");
         $this->line("Memory threshold: {$memoryThresholdPercent}%");
         $this->line("Monitoring interval: {$interval}s");
 
@@ -113,7 +113,7 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
         }
 
         while (true) {
-            $this->checkPod($memoryThresholdPercent, $echoAppPort);
+            $this->checkPod($memoryThresholdPercent, $serverPort);
 
             sleep($interval);
 
@@ -148,18 +148,18 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
 
         K8sPod::macro('acceptsConnections', function () {
             /** @var K8sPod $this */
-            return $this->getLabel('echo.soketi.app/accepts-new-connections', 'yes') === 'yes';
+            return $this->getLabel('pws.soketi.app/accepts-new-connections', 'yes') === 'yes';
         });
 
         K8sPod::macro('rejectsConnections', function () {
             /** @var K8sPod $this */
-            return $this->getLabel('echo.soketi.app/accepts-new-connections', 'yes') === 'no';
+            return $this->getLabel('pws.soketi.app/accepts-new-connections', 'yes') === 'no';
         });
 
         K8sPod::macro('acceptNewConnections', function () {
             /** @var K8sPod $this */
             $labels = array_merge($this->getLabels(), [
-                'echo.soketi.app/accepts-new-connections' => 'yes',
+                'pws.soketi.app/accepts-new-connections' => 'yes',
             ]);
 
             $this->refresh()->setLabels($labels)->update();
@@ -170,7 +170,7 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
         K8sPod::macro('rejectNewConnections', function () {
             /** @var K8sPod $this */
             $labels = array_merge($this->getLabels(), [
-                'echo.soketi.app/accepts-new-connections' => 'no',
+                'pws.soketi.app/accepts-new-connections' => 'no',
             ]);
 
             $this->refresh()->setLabels($labels)->update();
@@ -180,7 +180,7 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
 
         K8sPod::macro('ensureItHasDefaultLabel', function () {
             /** @var K8sPod $this */
-            if (! $this->getLabel('echo.soketi.app/accepts-new-connections')) {
+            if (! $this->getLabel('pws.soketi.app/accepts-new-connections')) {
                 $this->acceptNewConnections();
             }
         });

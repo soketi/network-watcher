@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: echo-server-test
+  name: pws-server-test
   labels:
-    app: echo-server-test
+    app: pws-server-test
     state: testing
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: echo-server-test
+      app: pws-server-test
       state: testing
   template:
     metadata:
       labels:
-        app: echo-server-test
+        app: pws-server-test
         state: testing
-        deployment-name: echo-server-test
+        deployment-name: pws-server-test
     spec:
       containers:
-        - name: echo
-          image: soketi/echo-server:5.3-14-alpine
+        - name: pws
+          image: soketi/pws-0.1-14-alpine
           env:
             - name: PRESENCE_STORAGE_DATABASE
               value: socket
