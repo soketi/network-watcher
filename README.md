@@ -11,6 +11,12 @@ Soketi Network Watcher
 
 Monitor the [pWS server](https://github.com/soketi/pws) container for memory allowance and new connections when running in Kubernetes.
 
+## 🤝 Supporting
+
+If you are using your application in your day-to-day job (in production), on presentation demos, hobby projects, or even school projects, spread some kind words about our work or sponsor our work via KoFi. 📦
+
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/R6R42U8CL)
+
 ## 📜 Documentation
 
 Documentation about how to integrate Network Watcher with your pWS-running pods is available [here](https://rennokki.gitbook.io/soketi-pws/network-watcher/getting-started).
