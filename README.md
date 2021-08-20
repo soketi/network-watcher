@@ -32,7 +32,7 @@ $ composer install --ignore-platform-reqs && cp .env.example .env
 ## Running the Network Watcher
 
 ```bash
-$ php application network:watch
+$ php artisan network:watch
 ```
 
 ## 🐛 Testing
