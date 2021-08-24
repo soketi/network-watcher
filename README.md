@@ -4,6 +4,7 @@ Soketi Network Watcher
 ![CI](https://github.com/soketi/network-watcher/workflows/CI/badge.svg?branch=master)
 [![codecov](https://codecov.io/gh/soketi/network-watcher/branch/master/graph/badge.svg)](https://codecov.io/gh/soketi/network-watcher)
 [![StyleCI](https://github.styleci.io/repos/350800968/shield?branch=master)](https://github.styleci.io/repos/350800968)
+![License](https://img.shields.io/github/license/soketi/network-watcher)
 
 ![v1.19.10 K8s Version](https://img.shields.io/badge/K8s%20v1.19.10-Ready-%23326ce5?colorA=306CE8&colorB=green)
 ![v1.20.6 K8s Version](https://img.shields.io/badge/K8s%20v1.20.6-Ready-%23326ce5?colorA=306CE8&colorB=green)
