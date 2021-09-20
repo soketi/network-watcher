@@ -18,7 +18,7 @@
     "require": {
         "php": "^7.4|^8.0",
         "guzzlehttp/guzzle": "^7.3.0",
-        "illuminate/http": "^8.0",
+        "illuminate/http": "^8.61",
         "laravel-zero/framework": "^8.8",
         "renoki-co/laravel-php-k8s": "^2.1"
     },
