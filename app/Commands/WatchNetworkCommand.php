@@ -25,6 +25,7 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
         {--server-port=6001 : The Server port.}
         {--memory-percent=75 : The threshold at which new connections close for a specific server.}
         {--interval=1 : The interval in seconds between each checks.}
+        {--kubernetes-label=pws.soketi.app/accepts-new-connections : The label to attach to the Kubernetes services.}
         {--test : Run only one loop for testing.}
     ';
 
@@ -141,25 +142,27 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
      */
     protected function registerPodMacros(): void
     {
+        $kubernetesLabel = env('KUBERNETES_LABEL') ?: $this->option('kubernetes-label');
+
         K8sPod::macro('getLabel', function (string $name, $default = null) {
             /** @var K8sPod $this */
             return $this->getLabels()[$name] ?? $default;
         });
 
-        K8sPod::macro('acceptsConnections', function () {
+        K8sPod::macro('acceptsConnections', function () use ($kubernetesLabel) {
             /** @var K8sPod $this */
-            return $this->getLabel('pws.soketi.app/accepts-new-connections', 'yes') === 'yes';
+            return $this->getLabel($kubernetesLabel, 'yes') === 'yes';
         });
 
-        K8sPod::macro('rejectsConnections', function () {
+        K8sPod::macro('rejectsConnections', function () use ($kubernetesLabel) {
             /** @var K8sPod $this */
-            return $this->getLabel('pws.soketi.app/accepts-new-connections', 'yes') === 'no';
+            return $this->getLabel($kubernetesLabel, 'yes') === 'no';
         });
 
-        K8sPod::macro('acceptNewConnections', function () {
+        K8sPod::macro('acceptNewConnections', function () use ($kubernetesLabel) {
             /** @var K8sPod $this */
             $labels = array_merge($this->getLabels(), [
-                'pws.soketi.app/accepts-new-connections' => 'yes',
+                $kubernetesLabel => 'yes',
             ]);
 
             $this->refresh()->setLabels($labels)->update();
@@ -167,10 +170,10 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
             return true;
         });
 
-        K8sPod::macro('rejectNewConnections', function () {
+        K8sPod::macro('rejectNewConnections', function () use ($kubernetesLabel) {
             /** @var K8sPod $this */
             $labels = array_merge($this->getLabels(), [
-                'pws.soketi.app/accepts-new-connections' => 'no',
+                $kubernetesLabel => 'no',
             ]);
 
             $this->refresh()->setLabels($labels)->update();
@@ -178,9 +181,9 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
             return true;
         });
 
-        K8sPod::macro('ensureItHasDefaultLabel', function () {
+        K8sPod::macro('ensureItHasDefaultLabel', function () use ($kubernetesLabel) {
             /** @var K8sPod $this */
-            if (! $this->getLabel('pws.soketi.app/accepts-new-connections')) {
+            if (! $this->getLabel($kubernetesLabel)) {
                 $this->acceptNewConnections();
             }
         });
