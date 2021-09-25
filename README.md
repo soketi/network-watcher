@@ -6,9 +6,9 @@ Soketi Network Watcher
 [![StyleCI](https://github.styleci.io/repos/350800968/shield?branch=master)](https://github.styleci.io/repos/350800968)
 ![License](https://img.shields.io/github/license/soketi/network-watcher)
 
-![v1.19.10 K8s Version](https://img.shields.io/badge/K8s%20v1.19.10-Ready-%23326ce5?colorA=306CE8&colorB=green)
-![v1.20.6 K8s Version](https://img.shields.io/badge/K8s%20v1.20.6-Ready-%23326ce5?colorA=306CE8&colorB=green)
-![v1.21.0 K8s Version](https://img.shields.io/badge/K8s%20v1.21.0-Ready-%23326ce5?colorA=306CE8&colorB=green)
+![v1.20.10 K8s Version](https://img.shields.io/badge/K8s%20v1.20.10-Ready-%23326ce5?colorA=306CE8&colorB=green)
+![v1.21.4 K8s Version](https://img.shields.io/badge/K8s%20v1.21.4-Ready-%23326ce5?colorA=306CE8&colorB=green)
+![v1.22.1 K8s Version](https://img.shields.io/badge/K8s%20v1.22.1-Ready-%23326ce5?colorA=306CE8&colorB=green)
 
 Monitor the [pWS server](https://github.com/soketi/pws) container for memory allowance and new connections when running in Kubernetes.
 
