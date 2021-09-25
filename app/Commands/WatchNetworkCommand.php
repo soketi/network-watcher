@@ -51,8 +51,6 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
     public function __construct()
     {
         parent::__construct();
-
-        $this->registerPodMacros();
     }
 
     /**
@@ -91,6 +89,8 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
     public function handle()
     {
         $this->line('Starting the watcher...');
+
+        $this->registerPodMacros();
 
         $podNamespace = env('POD_NAMESPACE') ?: $this->option('pod-namespace');
         $podName = env('POD_NAME') ?: $this->option('pod-name');
