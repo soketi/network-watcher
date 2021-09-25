@@ -1,5 +1,5 @@
-Soketi Network Watcher
-=======================
+Network Watcher
+===============
 
 ![CI](https://github.com/soketi/network-watcher/workflows/CI/badge.svg?branch=master)
 [![codecov](https://codecov.io/gh/soketi/network-watcher/branch/master/graph/badge.svg)](https://codecov.io/gh/soketi/network-watcher)
@@ -10,7 +10,11 @@ Soketi Network Watcher
 ![v1.21.4 K8s Version](https://img.shields.io/badge/K8s%20v1.21.4-Ready-%23326ce5?colorA=306CE8&colorB=green)
 ![v1.22.1 K8s Version](https://img.shields.io/badge/K8s%20v1.22.1-Ready-%23326ce5?colorA=306CE8&colorB=green)
 
-Monitor the [pWS server](https://github.com/soketi/pws) container for memory allowance and new connections when running in Kubernetes.
+Monitor Kubernetes containers for memory allowance and redirect new HTTP/WebSocket connections to pods that have enough memory to sustain them.
+
+This can be generally used for any kind of server, but its main purpose was to redirect new WebSocket connections to pods that have enough memory to withstand them in [pWS server](https://github.com/soketi/pws).
+
+Under the hood, it works by setting a pod label to either `yes`/`no` and you should make the Kubernetes Service to seek for pods by that label, with the value `yes`. You can find examples [in the documentation](https://rennokki.gitbook.io/soketi-pws/network-watcher/getting-started).
 
 ## 🤝 Supporting
 
