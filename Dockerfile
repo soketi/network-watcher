@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY builds/network-watcher /app/network-watcher
 
-RUN docker-php-ext-configure bcmatch --enable-bcmath && \
+RUN docker-php-ext-configure bcmath --enable-bcmath && \
     docker-php-ext-configure pcntl --enable-pcntl && \
     docker-php-ext-configure mbstring --enable-mbstring && \
     docker-php-ext-install bcmath intl mbstring pcntl sockets zip
