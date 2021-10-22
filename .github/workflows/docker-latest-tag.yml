@@ -18,7 +18,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    name: Tag Release
+    name: Tag Latest Release
 
     steps:
       - uses: actions/checkout@v2
@@ -57,12 +57,9 @@ jobs:
         run: |
           php artisan app:build network-watcher --build-version=stable
 
-      - name: Remove gitignore
-        run: |
-          rm .gitignore
-
       - name: Build and Push
         uses: docker/build-push-action@v2
         with:
           push: true
           tags: quay.io/soketi/network-watcher:latest
+          context: .
