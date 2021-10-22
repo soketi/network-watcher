@@ -49,6 +49,14 @@ jobs:
           username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
           password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
 
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader --no-dev
+
+      - name: Compile binary
+        run: |
+          php artisan app:build network-watcher --build-version=stable
+
       - name: Build and Push
         uses: docker/build-push-action@v2
         with:
