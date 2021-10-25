@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": "^7.4|^8.0",
+        "php": "^8.0",
         "guzzlehttp/guzzle": "^7.3.0",
         "illuminate/http": "^8.63",
         "laravel-zero/framework": "^8.8",
@@ -24,7 +24,8 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.4.3",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "vimeo/psalm": "^4.11"
     },
     "suggest": {
         "ext-pcntl": "The command needs pcntl to listen to SIGINT/SIGTERM signals."
