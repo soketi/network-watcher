@@ -12,9 +12,9 @@ Network Watcher
 
 Monitor Kubernetes containers for memory allowance and redirect new HTTP/WebSocket connections to pods that have enough memory to sustain them.
 
-This can be generally used for any kind of server, but its main purpose was to redirect new WebSocket connections to pods that have enough memory to withstand them in [pWS server](https://github.com/soketi/pws).
+This can be generally used for any kind of server, but its main purpose was to redirect new WebSocket connections to pods that have enough memory to withstand them in [soketi server](https://github.com/soketi/soketi).
 
-Under the hood, it works by setting a pod label to either `yes`/`no` and you should make the Kubernetes Service to seek for pods by that label, with the value `yes`. You can find examples [in the documentation](https://rennokki.gitbook.io/soketi-pws/network-watcher/getting-started).
+Under the hood, it works by setting a pod label to either `yes`/`no` and you should make the Kubernetes Service to seek for pods by that label, with the value `yes`. You can find examples [in the documentation](https://rennokki.gitbook.io/soketi/network-watcher/getting-started).
 
 ## 🤝 Supporting
 
@@ -24,7 +24,7 @@ Under the hood, it works by setting a pod label to either `yes`/`no` and you sho
 
 ## 📜 Documentation
 
-Documentation about how to integrate Network Watcher with your pWS-running pods is available [here](https://rennokki.gitbook.io/soketi-pws/network-watcher/getting-started).
+Documentation about how to integrate Network Watcher with your soketi-running pods is available [here](https://rennokki.gitbook.io/soketi-docs/network-watcher/getting-started).
 
 ## 🚀 Installation
 

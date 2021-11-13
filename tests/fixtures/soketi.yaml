@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pws-server-test
+  name: soketi-server-test
   labels:
-    app: pws-server-test
+    app: soketi-server-test
     state: testing
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pws-server-test
+      app: soketi-server-test
       state: testing
   template:
     metadata:
       labels:
-        app: pws-server-test
+        app: soketi-server-test
         state: testing
-        deployment-name: pws-server-test
+        deployment-name: soketi-server-test
     spec:
       containers:
-        - name: pws
-          image: quay.io/soketi/pws:0.6-16-alpine
+        - name: soketi
+          image: quay.io/soketi/soketi:0.13-16-alpine
           env:
             - name: PRESENCE_STORAGE_DATABASE
               value: socket

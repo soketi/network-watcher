@@ -25,7 +25,7 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
         {--server-port=6001 : The Server port.}
         {--memory-percent=75 : The threshold at which new connections close for a specific server.}
         {--interval=1 : The interval in seconds between each checks.}
-        {--kubernetes-label=pws.soketi.app/accepts-new-connections : The label to attach to the Kubernetes services.}
+        {--kubernetes-label=ws.soketi.app/accepts-new-connections : The label to attach to the Kubernetes services.}
         {--test : Run only one loop for testing.}
     ';
 
@@ -34,7 +34,7 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
      *
      * @var string
      */
-    protected $description = 'Run the Network watcher controller for the pWS server.';
+    protected $description = 'Run the Network watcher controller for the soketi server.';
 
     /**
      * The current pod the instance is running into.
@@ -75,7 +75,7 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
     public function handleSignal(int $signal): void
     {
         // Simply just mark the pod as rejecting the new connections while it's terminating.
-        // This way, the pWS Server will close all existing connections internally,
+        // This way, the soketi Server will close all existing connections internally,
         // but the Network Watcher will also mark the pod as not being able to receive new connections for
         // the sole purpose of redirecting the traffic to other pods.
         $this->pod->rejectNewConnections();
