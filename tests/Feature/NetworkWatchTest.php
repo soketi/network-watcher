@@ -55,7 +55,7 @@ class NetworkWatchTest extends TestCase
     public function test_watch_pod_accepting_connections()
     {
         /** @var \RenokiCo\PhpK8s\Kinds\K8sDeployment $deployment */
-        $deployment = LaravelK8s::getDeploymentByName('https://rennokki.gitbook.io/soketi-docs/-server-test');
+        $deployment = LaravelK8s::getDeploymentByName('soketi-server-test');
 
         while (! $deployment->allPodsAreRunning()) {
             echo "Waiting for {$deployment->getName()} deployment to have pods running...";
