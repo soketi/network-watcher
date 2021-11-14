@@ -10,21 +10,21 @@ Network Watcher
 ![v1.21.4 K8s Version](https://img.shields.io/badge/K8s%20v1.21.4-Ready-%23326ce5?colorA=306CE8&colorB=green)
 ![v1.22.1 K8s Version](https://img.shields.io/badge/K8s%20v1.22.1-Ready-%23326ce5?colorA=306CE8&colorB=green)
 
-Monitor Kubernetes containers for memory allowance and redirect new HTTP/WebSocket connections to pods that have enough memory to sustain them.
+Network Watcher is [soketi](https://github.com/soketi/soketi)'s companion that scouts the memory to avoid memory depletion.
 
-This can be generally used for any kind of server, but its main purpose was to redirect new WebSocket connections to pods that have enough memory to withstand them in [soketi server](https://github.com/soketi/soketi).
-
-Under the hood, it works by setting a pod label to either `yes`/`no` and you should make the Kubernetes Service to seek for pods by that label, with the value `yes`. You can find examples [in the documentation](https://rennokki.gitbook.io/soketi-docs/network-watcher/getting-started).
+This project was meant to be deployed in the same Pod (as a sidecar container) with soketi. Network Watcher will continuously scan the memory usage for soketi containers and in case a specific threshold is reached, it will update the Kubernetes Pod's labels to avoid new connections from kicking in, while keeping the old ones active. You can find examples [in the documentation](https://rennokki.gitbook.io/soketi-docs/network-watcher/getting-started).
 
 ## 🤝 Supporting
 
-**If you are using one or more Renoki Co. open-source packages in your production apps, in presentation demos, hobby projects, school projects or so, sponsor our work with [Github Sponsors](https://github.com/sponsors/rennokki). 📦**
+soketi is meant to be free, forever. Having a good companion for developing real-time apps locally should not involve any third-party and having a reliable option to deploy behind a firewall makes soketi a good option.
+
+Development is done by investing time, so any help coming is appreciated. You can sponsor the development via [Github Sponsors](https://github.com/sponsors/rennokki). 📦
 
 [<img src="https://github-content.s3.fr-par.scw.cloud/static/39.jpg" height="210" width="418" />](https://github-content.renoki.org/github-repo/39)
 
 ## 📜 Documentation
 
-Documentation about how to integrate Network Watcher with your soketi-running pods is available [here](https://rennokki.gitbook.io/soketi-docs/network-watcher/getting-started).
+Documentation about how to integrate Network Watcher with your soketi-running Kubernetes Pods is available in the [official documentation](https://rennokki.gitbook.io/soketi-docs/network-watcher/getting-started).
 
 ## 🚀 Installation
 
