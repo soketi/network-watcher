@@ -24,7 +24,7 @@ Development is done by investing time, so any help coming is appreciated. You ca
 
 ## 📜 Documentation
 
-Documentation about how to integrate Network Watcher with your soketi-running Kubernetes Pods is available in the [official documentation](https://rennokki.gitbook.io/soketi-docs/network-watcher/getting-started).
+The integration steps of Network Watcher with your soketi-running Kubernetes Pods is available in the [official documentation](https://rennokki.gitbook.io/soketi-docs/network-watcher/getting-started).
 
 ## 🚀 Installation
 
