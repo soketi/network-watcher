@@ -14,7 +14,7 @@ Monitor Kubernetes containers for memory allowance and redirect new HTTP/WebSock
 
 This can be generally used for any kind of server, but its main purpose was to redirect new WebSocket connections to pods that have enough memory to withstand them in [soketi server](https://github.com/soketi/soketi).
 
-Under the hood, it works by setting a pod label to either `yes`/`no` and you should make the Kubernetes Service to seek for pods by that label, with the value `yes`. You can find examples [in the documentation](https://rennokki.gitbook.io/soketi/network-watcher/getting-started).
+Under the hood, it works by setting a pod label to either `yes`/`no` and you should make the Kubernetes Service to seek for pods by that label, with the value `yes`. You can find examples [in the documentation](https://rennokki.gitbook.io/soketi-docs/network-watcher/getting-started).
 
 ## 🤝 Supporting
 
