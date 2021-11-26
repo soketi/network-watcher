@@ -22,7 +22,7 @@ class WatchNetworkCommand extends Command implements SignalableCommandInterface
     protected $signature = 'network:watch
         {--pod-namespace=default : The Pod namespace. Defaults to the current Pod namespace.}
         {--pod-name=some-pod : The Pod name to watch. Defaults to the current Pod name.}
-        {--server-port=6001 : The Server port.}
+        {--server-port=9601 : The Server port.}
         {--memory-percent=75 : The threshold at which new connections close for a specific server.}
         {--interval=1 : The interval in seconds between each checks.}
         {--kubernetes-label=ws.soketi.app/accepts-new-connections : The label to attach to the Kubernetes services.}

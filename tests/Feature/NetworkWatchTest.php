@@ -34,7 +34,7 @@ class NetworkWatchTest extends TestCase
         $this->artisan('network:watch', [
             '--pod-namespace' => 'default',
             '--pod-name' => $pod->getName(),
-            '--server-port' => 6001,
+            '--server-port' => 9601,
             '--memory-percent' => 80,
             '--interval' => 1,
             '--test' => true,
@@ -75,7 +75,7 @@ class NetworkWatchTest extends TestCase
         $this->artisan('network:watch', [
             '--pod-namespace' => 'default',
             '--pod-name' => $pod->getName(),
-            '--server-port' => 6001,
+            '--server-port' => 9601,
             '--memory-percent' => 90,
             '--interval' => 1,
             '--test' => true,

@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: soketi
-          image: quay.io/soketi/soketi:0.13-16-alpine
+          image: quay.io/soketi/soketi:0.17-16-alpine
           env:
             - name: PRESENCE_STORAGE_DATABASE
               value: socket
@@ -34,6 +34,7 @@ spec:
             - start
           ports:
             - containerPort: 6001
+            - containerPort: 9601
           resources:
             limits:
               cpu: 500m
