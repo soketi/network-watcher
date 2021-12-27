@@ -888,16 +888,16 @@
         },
         {
             "name": "illuminate/collections",
-            "version": "v8.76.2",
+            "version": "v8.77.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/collections.git",
-                "reference": "f7dc6269a1d773f1d7a2a71034f32d2b60eaac42"
+                "reference": "bafdbd033a717aed94e4d023512f2c9eb3e8cd77"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/collections/zipball/f7dc6269a1d773f1d7a2a71034f32d2b60eaac42",
-                "reference": "f7dc6269a1d773f1d7a2a71034f32d2b60eaac42",
+                "url": "https://api.github.com/repos/illuminate/collections/zipball/bafdbd033a717aed94e4d023512f2c9eb3e8cd77",
+                "reference": "bafdbd033a717aed94e4d023512f2c9eb3e8cd77",
                 "shasum": ""
             },
             "require": {
@@ -938,7 +938,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2021-12-15T13:57:47+00:00"
+            "time": "2021-12-16T15:00:27+00:00"
         },
         {
             "name": "illuminate/config",
@@ -1101,7 +1101,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v8.76.2",
+            "version": "v8.77.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -1324,7 +1324,7 @@
         },
         {
             "name": "illuminate/macroable",
-            "version": "v8.76.2",
+            "version": "v8.77.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
@@ -1474,16 +1474,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v8.76.2",
+            "version": "v8.77.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "9429d41f950d3461910fd51a4df90b2ac93a9f3a"
+                "reference": "789b5c9a28884bc6b07841574cc86abdec7c5f68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/9429d41f950d3461910fd51a4df90b2ac93a9f3a",
-                "reference": "9429d41f950d3461910fd51a4df90b2ac93a9f3a",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/789b5c9a28884bc6b07841574cc86abdec7c5f68",
+                "reference": "789b5c9a28884bc6b07841574cc86abdec7c5f68",
                 "shasum": ""
             },
             "require": {
@@ -1538,7 +1538,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2021-12-14T16:49:40+00:00"
+            "time": "2021-12-21T14:59:41+00:00"
         },
         {
             "name": "illuminate/testing",
@@ -3620,24 +3620,24 @@
         },
         {
             "name": "renoki-co/laravel-php-k8s",
-            "version": "3.2.0",
+            "version": "3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/renoki-co/laravel-php-k8s.git",
-                "reference": "60bc377dcd397d58837d7613651a8a98922f5bcf"
+                "reference": "aae225d4d043d0ed24a42d8dee4709446d53fc3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/renoki-co/laravel-php-k8s/zipball/60bc377dcd397d58837d7613651a8a98922f5bcf",
-                "reference": "60bc377dcd397d58837d7613651a8a98922f5bcf",
+                "url": "https://api.github.com/repos/renoki-co/laravel-php-k8s/zipball/aae225d4d043d0ed24a42d8dee4709446d53fc3e",
+                "reference": "aae225d4d043d0ed24a42d8dee4709446d53fc3e",
                 "shasum": ""
             },
             "require": {
-                "renoki-co/php-k8s": "^3.2.0"
+                "renoki-co/php-k8s": "^3.2.1"
             },
             "require-dev": {
                 "mockery/mockery": "^1.4",
-                "orchestra/testbench": "^6.23.1"
+                "orchestra/testbench": "^6.23.2"
             },
             "type": "library",
             "extra": {
@@ -3680,7 +3680,7 @@
             ],
             "support": {
                 "issues": "https://github.com/renoki-co/laravel-php-k8s/issues",
-                "source": "https://github.com/renoki-co/laravel-php-k8s/tree/3.2.0"
+                "source": "https://github.com/renoki-co/laravel-php-k8s/tree/3.2.1"
             },
             "funding": [
                 {
@@ -3688,7 +3688,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-12-19T16:26:54+00:00"
+            "time": "2021-12-27T18:14:00+00:00"
         },
         {
             "name": "renoki-co/php-k8s",
