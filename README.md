@@ -12,7 +12,7 @@ Network Watcher
 
 Network Watcher is [soketi](https://github.com/soketi/soketi)'s companion that scouts the memory to avoid memory depletion.
 
-This project was meant to be deployed in the same Pod (as a sidecar container) with soketi. Network Watcher will continuously scan the memory usage for soketi containers and in case a specific threshold is reached, it will update the Kubernetes Pod's labels to avoid new connections from kicking in, while keeping the old ones active. You can find examples [in the documentation](https://rennokki.gitbook.io/soketi-docs/network-watcher/getting-started).
+This project was meant to be deployed in the same Pod (as a sidecar container) with soketi. Network Watcher will continuously scan the memory usage for soketi containers and in case a specific threshold is reached, it will update the Kubernetes Pod's labels to avoid new connections from kicking in, while keeping the old ones active. You can find examples [in the documentation](https://rennokki.gitbook.io/soketi-docs/network-watcher/installation).
 
 ## 🤝 Supporting
 
