@@ -23,7 +23,7 @@
         "renoki-co/laravel-php-k8s": "^3.2"
     },
     "require-dev": {
-        "mockery/mockery": "^1.4.3",
+        "mockery/mockery": "^1.5.0",
         "phpunit/phpunit": "^9.5",
         "vimeo/psalm": "^4.18"
     },
