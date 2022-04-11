@@ -70,7 +70,7 @@ jobs:
         run: |
           vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
 
-      - uses: codecov/codecov-action@v2.1.0
+      - uses: codecov/codecov-action@v3.0.0
         with:
           fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
