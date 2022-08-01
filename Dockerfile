@@ -1,4 +1,4 @@
-FROM quay.io/renokico/laravel-base:worker-1.2.0-8.0-cli-alpine
+FROM quay.io/renokico/laravel-base:worker-1.3.0-8.1-cli-alpine
 
 WORKDIR /app
 
